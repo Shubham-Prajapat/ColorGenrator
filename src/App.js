@@ -1,63 +1,36 @@
-import React ,{ useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import './App.css';
+
 const App = () => {
-  const endDate = "16 Aug 2023 10:00 AM";
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [randomNumber, setRandomNumber] = useState();
+  const [randomCode, setRandomCode] = useState();
+  const [backgroundColor, setBackgroundColor] = useState('#ffffff'); // Default background color
 
-  useEffect(() => {
-    const timer = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-
-  const updateCountdown = () => {
-    const end = new Date(endDate);
-    const now = new Date();
-    const diff = (end - now) / 1000;
-    
-    setDays(Math.floor(diff / 3600 / 24));
-    setHours(Math.floor(diff / 3600) % 24);
-    setMinutes(Math.floor(diff / 60) % 60);
-    setSeconds(Math.floor(diff % 60));
+  // Function to generate a random color
+  const generateRandomColor = () => {
+    const randomNum = Math.floor(Math.random() * 16777215);
+    const randomHexCode = '#' + randomNum.toString(16).toUpperCase();
+    setRandomNumber(randomNum);
+    setRandomCode(randomHexCode);
+    setBackgroundColor(randomHexCode); // Set the background color
+    navigator.clipboard.writeText(randomHexCode);
   };
 
- 
+  // useEffect to set the initial default color
+  useEffect(() => {
+    generateRandomColor(); // Call the function to set the default color
+  }, []);
+
   return (
-    <div className='main'>
-      <div className="overlay">
-        <div className="title">We are Coming soon</div>
-        <div className="title" id='end-date'>{endDate}</div>
-        <div className="col">
-          <div>
-          <input type='text' readOnly value={days} />
-          <br/>
-          <label>Days</label>
-          </div>
-          <div>
-          <input type='text' readOnly value={hours} />
-          <br/>
-          <label>Hours</label>
-          </div>
-          <div>
-          <input type='text' readOnly value={minutes}/>
-          <br/>
-          <label>Minutes</label>
-          </div>
-          <div>
-          <input type='text'  readOnly value={seconds}/>
-          <br/>
-          <label>Second</label>
-          </div>
-        </div>
+    <div className='main' style={{ backgroundColor }}>
+      <div className='container'>
+        <h2 id='color-code'>{randomCode}</h2>
+        <button id='btn' onClick={generateRandomColor}>
+          Click Me
+        </button>
       </div>
-
-
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
